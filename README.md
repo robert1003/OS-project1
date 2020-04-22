@@ -15,9 +15,11 @@ make
 ### spec
 
 I added three custom system call:
+
 + `asmlinkage long sys_my_print(char *s)`, id=333
 + `asmlinkage long sys_my_time(unsigned long *sec, unsigned long *nsec)`, id=334
 + `asmlinkage long sys_my_hello(void)`, id=335
+
 The last system call is just for testing, and the `id` represent the system call id.
 
 ### step
