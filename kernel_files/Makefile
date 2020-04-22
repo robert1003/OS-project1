@@ -1,3 +1,3 @@
 
-obj-y := my_print my_time my_hello_world
+obj-y := my_print my_time my_hello
 
