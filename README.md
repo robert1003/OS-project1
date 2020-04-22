@@ -1,5 +1,10 @@
 # OS project 1
 
+## environment
+
++ Ubuntu 16.04
++ kernel 4.13.0 -> kernel 4.15.4
+
 ## execute main program
 
 Note that new system calls need to be added first.
