@@ -44,9 +44,9 @@ cd /usr/src/linux-4.15.4/
 
 # edit linux-4.15.4/arch/x86/entry/syscalls/syscall_64.tbl
 # add the following three lines
-# 333   64      my_print        sys_my_print
-# 334   64      my_time         sys_my_time
-# 335   64      my_hello        sys_my_hello
+# 333     64      my_print          sys_my_print
+# 334     64      my_time           sys_my_time
+# 335     64      my_hello          sys_my_hello
 
 # edit linux-4.15.4/include/linux/syscalls.h
 # add the following three lines to the end of the files
