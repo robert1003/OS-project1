@@ -74,5 +74,5 @@ make modules_install install
 shutdown -r now
 
 # check kernel version
-uname
+uname -a
 ```
