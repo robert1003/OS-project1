@@ -42,7 +42,7 @@ apt-get upgrade
 wget https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.15.4.tar.xz
 
 # extrace kernel source code and move our system call into it
-sudo tar -xvf linux-4.15.4.tar.xz -C /usr/src/
+tar -xvf linux-4.15.4.tar.xz -C /usr/src/
 cp -r [OS-project1_dir_path/kernel_files] /usr/src/linux-4.15.4/kernel_files
 cd /usr/src/linux-4.15.4/
 
