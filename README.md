@@ -58,7 +58,7 @@ cd /usr/src/linux-4.15.4/
 make menuconfig
 
 # compile files
-make -j32
+make -j[core_number]
 
 # install kernel
 make modules_install install
