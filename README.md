@@ -28,7 +28,7 @@ sudo -s
 
 # install required packages
 apt-get update
-apt-get install wget gcc libncurses5-dev bison flex libssl-dev libelf-dev
+apt-get install wget gcc libncurses5-dev bison flex libssl-dev libelf-dev vim git
 apt-get upgrade
 
 # get kernel source 4.15.4
