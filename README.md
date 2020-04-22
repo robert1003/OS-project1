@@ -17,7 +17,7 @@ make
 I added three custom system call:
 + `asmlinkage long sys_my_print(char *s)`, id=333
 + `asmlinkage long sys_my_time(unsigned long *sec, unsigned long *nsec)`, id=334
-+ `asmlinkage long sys_hello_world(void)`, id=335
++ `asmlinkage long sys_my_hello(void)`, id=335
 The last system call is just for testing, and the `id` represent the system call id.
 
 ### step
@@ -52,7 +52,7 @@ cd /usr/src/linux-4.15.4/
 # add the following three lines to the end of the files
 # asmlinkage long sys_my_print(char *s);
 # asmlinkage long sys_my_time(unsigned long *sec, unsigned long *nsec);
-# asmlinkage long sys_hello_world(void);
+# asmlinkage long sys_my_hello(void);
 
 # configure linux kernel
 make menuconfig
