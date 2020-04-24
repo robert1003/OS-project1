@@ -57,9 +57,9 @@ int main() {
     
     /* run! */
     if(op[0] == 'R') rr(task, n);
-    if(op[0] == 'F') rr(task, n);
-    if(op[0] == 'S') rr(task, n);
-    if(op[0] == 'P') rr(task, n);
+    if(op[0] == 'F') fifo(task, n);
+    if(op[0] == 'S') sjf(task, n);
+    if(op[0] == 'P') psjf(task, n);
 
     /* print result */
     for(int i = 0 ; i < n ; ++i) {

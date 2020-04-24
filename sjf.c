@@ -43,7 +43,12 @@ void sjf(Task *task, int n) {
     }
     // sort task
     qsort(task_c, n, sizeof(task_c[0]), cmp1_sjf);
-    
+#ifdef DEBUG
+    fprintf(stderr, "task:\n");
+    for(int i = 0 ; i < n ; ++i) {
+	fprintf(stderr, "%d: %d %d %d %d\n", i, task_c[i].arrive_time, task_c[i].remain_time, task_c[i].idx, task_c[i].pid);
+    }
+#endif
     int t = 0, start = 0, more = 0, event_cnt = 0, event[N][3], created[N] = {0};
     for(int i = 0 ; i < n ; ++i) {
         if(i > 0 && more > 1) {
@@ -53,11 +58,14 @@ void sjf(Task *task, int n) {
         // add new task_c
         int wt = task_c[i].arrive_time - t;
         if(wt < 0) wt = 0;
-        else if(wt == 0) if(i == 0) {
-            add_event_sjf(event, event_cnt++, 1, -1, task_c[i].idx);
-            created[task_c[i].idx] = 1;
+        else if(wt == 0) {
+	    if(i == 0) {
+            	add_event_sjf(event, event_cnt++, 1, -1, task_c[i].idx);
+            	created[task_c[i].idx] = 1;
+	    }
         }
         else {
+	    fprintf(stderr, "in: %d %d %d\n", t, wt, i);
             add_event_sjf(event, event_cnt++, 0, wt, -1);
             add_event_sjf(event, event_cnt++, 1, -1, task_c[i].idx);
             created[task_c[i].idx] = 1;
@@ -71,21 +79,22 @@ void sjf(Task *task, int n) {
             if(task_c[j].arrive_time <= t && task_c[j].arrive_time >= start) pre++;
             else break;
         }
+	more = 0;
         for(int j = i + 1 ; j < n ; ++j) {
-            if(task_c[i].arrive_time <= t) more += 1;
+            if(task_c[j].arrive_time <= t) more += 1;
             else break;
         }
         // update
         for(int j = i + 1 ; j < i + 1 + pre ; ++j) {
             if(created[task_c[j].idx] == 0) {
-                int rt = task_c[i].arrive_time - start;
+                int rt = task_c[j].arrive_time - start;
                 start = task_c[j].arrive_time;
                 if(rt != 0) {
                     add_event_sjf(event, event_cnt++, 2, rt, task_c[i].idx);
                     task_c[i].remain_time -= rt;
                 }
-                add_event_sjf(event, event_cnt++, 1, -1, task_c[i].idx);
-                created[task_c[i].idx] = 1;
+                add_event_sjf(event, event_cnt++, 1, -1, task_c[j].idx);
+                created[task_c[j].idx] = 1;
             }
         }
         // resume operation
@@ -94,7 +103,11 @@ void sjf(Task *task, int n) {
             task_c[i].remain_time = 0;
         }
     }
-
+#ifdef DEBUG
+    for(int i = 0 ; i < event_cnt ; ++i) {
+        fprintf(stderr, "%d %d %d\n", event[i][0], event[i][1], event[i][2]);
+    }
+#endif
     for(int i = 0 ; i < event_cnt ; ++i) {
         int op = event[i][0], val = event[i][1], idx = event[i][2];
         if(op == 0) {

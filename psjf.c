@@ -40,7 +40,12 @@ void psjf(Task *task, int n) {
     }
     // sort task
     qsort(task_c, n, sizeof(task_c[0]), cmp_psjf);
-
+#ifdef DEBUG
+    fprintf(stderr, "task:\n");
+    for(int i = 0 ; i < n ; ++i) {
+	fprintf(stderr, "%d: %d %d %d %d\n", i, task_c[i].arrive_time, task_c[i].remain_time, task_c[i].idx, task_c[i].pid);
+    }
+#endif
     int cnt = 0, nxt = n, now = task_c[0].arrive_time, event_cnt = 0, event[N][3], created[N];
     for(int i = 1 ; i < n ; ++i) {
         if(task_c[i].arrive_time != task_c[0].arrive_time) {
@@ -85,13 +90,17 @@ void psjf(Task *task, int n) {
                 }
             }
         }
-        add_event_psjf(event, event_cnt++, 2, min_time, task_c[min_idx].pid);
+        add_event_psjf(event, event_cnt++, 2, min_time, task_c[min_idx].idx);
         task_c[min_idx].remain_time -= min_time;
         now += min_time;
         if(task_c[min_idx].remain_time == 0) cnt += 1;
         if(cnt == n) break;
     }
-
+#ifdef DEBUG
+    for(int i = 0 ; i < event_cnt ; ++i) {
+        fprintf(stderr, "%d %d %d\n", event[i][0], event[i][1], event[i][2]);
+    }
+#endif
     for(int i = 0 ; i < event_cnt ; ++i) {
         int op = event[i][0], val = event[i][1], idx = event[i][2];
         if(op == 0) {

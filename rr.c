@@ -35,6 +35,12 @@ void rr(Task *task, int n) {
     }
     // sort task
     qsort(task_c, n, sizeof(task_c[0]), cmp_rr);
+#ifdef DEBUG
+    fprintf(stderr, "task:\n");
+    for(int i = 0 ; i < n ; ++i) {
+	fprintf(stderr, "%d: %d %d %d %d\n", i, task_c[i].arrive_time, task_c[i].remain_time, task_c[i].idx, task_c[i].pid);
+    }
+#endif
 
     int id[N], t = 0, pt = 0, lef = 0, rig = n - 1, cnt = 0;
 	while(pt != n || cnt) {
