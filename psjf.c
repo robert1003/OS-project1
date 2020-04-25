@@ -40,12 +40,7 @@ void psjf(Task *task, int n) {
     }
     // sort task
     qsort(task_c, n, sizeof(task_c[0]), cmp_psjf);
-#ifdef DEBUG
-    fprintf(stderr, "task:\n");
-    for(int i = 0 ; i < n ; ++i) {
-	fprintf(stderr, "%d: %d %d %d %d\n", i, task_c[i].arrive_time, task_c[i].remain_time, task_c[i].idx, task_c[i].pid);
-    }
-#endif
+
     int cnt = 0, nxt = n, now = task_c[0].arrive_time, event_cnt = 0, event[N][3], created[N];
     for(int i = 1 ; i < n ; ++i) {
         if(task_c[i].arrive_time != task_c[0].arrive_time) {

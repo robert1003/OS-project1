@@ -45,7 +45,7 @@ int main(int argc, char *argv[]) {
         if(total == 0) {
             assert(syscall(SYSCALL_TIME_ID, &ed.sec, &ed.nsec) != -1 && "task get end time failed");
             char mes[505];
-            sprintf(mes, "[Project1] %d %lu.%09lu, %lu.%09lu", getpid(), st.sec, st.nsec, ed.sec, ed.nsec);
+            sprintf(mes, "[Project1] %d %lu.%09lu %lu.%09lu", getpid(), st.sec, st.nsec, ed.sec, ed.nsec);
             assert(syscall(SYSCALL_PRINT_ID, mes) != -1 && "task print message failed");
         }
         /* reset priority, give control back to main */

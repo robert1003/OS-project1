@@ -36,20 +36,17 @@ void fifo(Task *task, int n) {
     }
     // sort task_c
     qsort(task_c, n, sizeof(task_c[0]), cmp_fifo);
-#ifdef DEBUG
-    fprintf(stderr, "task:\n");
-    for(int i = 0 ; i < n ; ++i) {
-	fprintf(stderr, "%d: %d %d %d %d\n", i, task_c[i].arrive_time, task_c[i].remain_time, task_c[i].idx, task_c[i].pid);
-    }
-#endif
+
     int t = 0, start = 0, event_cnt = 0, event[N][3], created[N] = {0};
     for(int i = 0 ; i < n ; ++i) {
         // add new task_c
         int wt = task_c[i].arrive_time - t;
         if(wt < 0) wt = 0;
-        else if(wt == 0) if(i == 0) {
-            add_event_fifo(event, event_cnt++, 1, -1, task_c[i].idx);
-            created[task_c[i].idx] = 1;
+        else if(wt == 0) {
+	    if(i == 0) {
+            	add_event_fifo(event, event_cnt++, 1, -1, task_c[i].idx);
+            	created[task_c[i].idx] = 1;
+	    }
         }
         else {
             add_event_fifo(event, event_cnt++, 0, wt, -1);

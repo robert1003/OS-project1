@@ -26,6 +26,11 @@ int cmp_rr(const void *a, const void *b) {
     if(x == y) return p > q ? 1 : -1;
     return x > y ? 1 : -1;
 }
+void add_event_rr(int (*event)[3], int event_cnt, int type, int value, int idx) {
+    event[event_cnt][0] = type;
+    event[event_cnt][1] = value;
+    event[event_cnt][2] = idx;
+}
 
 void rr(Task *task, int n) {
     // copy task
@@ -35,50 +40,64 @@ void rr(Task *task, int n) {
     }
     // sort task
     qsort(task_c, n, sizeof(task_c[0]), cmp_rr);
-#ifdef DEBUG
-    fprintf(stderr, "task:\n");
-    for(int i = 0 ; i < n ; ++i) {
-	fprintf(stderr, "%d: %d %d %d %d\n", i, task_c[i].arrive_time, task_c[i].remain_time, task_c[i].idx, task_c[i].pid);
-    }
-#endif
 
-    int id[N], t = 0, pt = 0, lef = 0, rig = n - 1, cnt = 0;
+    int id[N], t = 0, pt = 0, lef = 0, rig = n - 1, cnt = 0, event_cnt = 0, event[N][3];
 	while(pt != n || cnt) {
 		if(!cnt) {
 			int tt = task_c[pt].arrive_time - t;
 			t = task_c[pt].arrive_time;
-			for(int i = 0; i < tt; i++) one_time_unit();
-			create(&task[task_c[pt].idx]);
+            add_event_rr(event, event_cnt++, 0, tt, -1);
+            add_event_rr(event, event_cnt++, 1, -1, task_c[pt].idx);
 			rig++; if(rig == n) rig = 0;
 			id[rig] = pt;
 			pt++;
 			cnt++;
 		}
-		int p = id[lef], la = task[task_c[p].idx].remain_time;
+		int p = id[lef], la = task_c[p].remain_time;
 		if(la > TQ) la = TQ;
-		while(pt != n && t + la >= task[task_c[pt].idx].arrive_time) {
-			int used = task[task_c[pt].idx].arrive_time - t;
+		while(pt != n && t + la >= task_c[pt].arrive_time) {
+			int used = task_c[pt].arrive_time - t;
 			if(used) {
-				execute(&task[task_c[p].idx], used);
+                add_event_rr(event, event_cnt++, 2, used, task_c[p].idx);
+                task_c[p].remain_time -= used;
 				la -= used;
 				t += used;
 			}
-			create(&task[task_c[pt].idx]);
+            add_event_rr(event, event_cnt++, 1, -1, task_c[pt].idx);
 			rig++; if(rig == n) rig = 0;
 			id[rig] = pt;
 			pt++;
 			cnt++;
 		}
-		if(la) { 
-			execute(&task[task_c[p].idx], la);
+		if(la) {
+            add_event_rr(event, event_cnt++, 2, la, task_c[p].idx);
+            task_c[p].remain_time -= la;
 			t += la;
 		}
 		lef++; if(lef == n) lef = 0;
 		cnt--;
-		if(task[task_c[p].idx].remain_time) {
+		if(task_c[p].remain_time) {
 			rig++; if(rig == n) rig = 0;
 			id[rig] = p;
 			cnt++;
 		}
 	}
+#ifdef DEBUG
+    for(int i = 0 ; i < event_cnt ; ++i) {
+        fprintf(stderr, "%d %d %d\n", event[i][0], event[i][1], event[i][2]);
+    }
+#endif
+    for(int i = 0 ; i < event_cnt ; ++i) {
+        int op = event[i][0], val = event[i][1], idx = event[i][2];
+        if(op == 0) {
+            for(int t = 0 ; t < val ; ++t) one_time_unit();
+        }
+        else if(op == 1) {
+            create(&task[idx]);
+        }
+        else if(op == 2) {
+            execute(&task[idx], val);
+        }
+        else assert(0 && "op not in 0, 1, 2");
+    }
 }

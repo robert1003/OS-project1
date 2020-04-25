@@ -43,12 +43,7 @@ void sjf(Task *task, int n) {
     }
     // sort task
     qsort(task_c, n, sizeof(task_c[0]), cmp1_sjf);
-#ifdef DEBUG
-    fprintf(stderr, "task:\n");
-    for(int i = 0 ; i < n ; ++i) {
-	fprintf(stderr, "%d: %d %d %d %d\n", i, task_c[i].arrive_time, task_c[i].remain_time, task_c[i].idx, task_c[i].pid);
-    }
-#endif
+
     int t = 0, start = 0, more = 0, event_cnt = 0, event[N][3], created[N] = {0};
     for(int i = 0 ; i < n ; ++i) {
         if(i > 0 && more > 1) {
@@ -65,7 +60,6 @@ void sjf(Task *task, int n) {
 	    }
         }
         else {
-	    fprintf(stderr, "in: %d %d %d\n", t, wt, i);
             add_event_sjf(event, event_cnt++, 0, wt, -1);
             add_event_sjf(event, event_cnt++, 1, -1, task_c[i].idx);
             created[task_c[i].idx] = 1;
