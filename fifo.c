@@ -43,10 +43,10 @@ void fifo(Task *task, int n) {
         int wt = task_c[i].arrive_time - t;
         if(wt < 0) wt = 0;
         else if(wt == 0) {
-	    if(i == 0) {
-            	add_event_fifo(event, event_cnt++, 1, -1, task_c[i].idx);
-            	created[task_c[i].idx] = 1;
-	    }
+            if(i == 0) {
+                add_event_fifo(event, event_cnt++, 1, -1, task_c[i].idx);
+                created[task_c[i].idx] = 1;
+            }
         }
         else {
             add_event_fifo(event, event_cnt++, 0, wt, -1);
@@ -100,3 +100,4 @@ void fifo(Task *task, int n) {
         else assert(0 && "op not in 0, 1, 2");
     }
 }
+

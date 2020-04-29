@@ -52,3 +52,4 @@ void execute(Task *task, int duration) {
 void clear(Task *task) {
     waitpid(task->pid, NULL, 0);
 }
+

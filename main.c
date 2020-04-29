@@ -72,3 +72,4 @@ int main() {
     /* release shared memory */
     shm_unlink(SHM_NAME);
 }
+

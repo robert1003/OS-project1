@@ -42,46 +42,46 @@ void rr(Task *task, int n) {
     qsort(task_c, n, sizeof(task_c[0]), cmp_rr);
 
     int id[N], t = 0, pt = 0, lef = 0, rig = n - 1, cnt = 0, event_cnt = 0, event[N][3];
-	while(pt != n || cnt) {
-		if(!cnt) {
-			int tt = task_c[pt].arrive_time - t;
-			t = task_c[pt].arrive_time;
+    while(pt != n || cnt) {
+        if(!cnt) {
+            int tt = task_c[pt].arrive_time - t;
+            t = task_c[pt].arrive_time;
             add_event_rr(event, event_cnt++, 0, tt, -1);
             add_event_rr(event, event_cnt++, 1, -1, task_c[pt].idx);
-			rig++; if(rig == n) rig = 0;
-			id[rig] = pt;
-			pt++;
-			cnt++;
-		}
-		int p = id[lef], la = task_c[p].remain_time;
-		if(la > TQ) la = TQ;
-		while(pt != n && t + la >= task_c[pt].arrive_time) {
-			int used = task_c[pt].arrive_time - t;
-			if(used) {
+            rig++; if(rig == n) rig = 0;
+            id[rig] = pt;
+            pt++;
+            cnt++;
+        }
+        int p = id[lef], la = task_c[p].remain_time;
+        if(la > TQ) la = TQ;
+        while(pt != n && t + la >= task_c[pt].arrive_time) {
+            int used = task_c[pt].arrive_time - t;
+            if(used) {
                 add_event_rr(event, event_cnt++, 2, used, task_c[p].idx);
                 task_c[p].remain_time -= used;
-				la -= used;
-				t += used;
-			}
+                la -= used;
+                t += used;
+            }
             add_event_rr(event, event_cnt++, 1, -1, task_c[pt].idx);
-			rig++; if(rig == n) rig = 0;
-			id[rig] = pt;
-			pt++;
-			cnt++;
-		}
-		if(la) {
+            rig++; if(rig == n) rig = 0;
+            id[rig] = pt;
+            pt++;
+            cnt++;
+        }
+        if(la) {
             add_event_rr(event, event_cnt++, 2, la, task_c[p].idx);
             task_c[p].remain_time -= la;
-			t += la;
-		}
-		lef++; if(lef == n) lef = 0;
-		cnt--;
-		if(task_c[p].remain_time) {
-			rig++; if(rig == n) rig = 0;
-			id[rig] = p;
-			cnt++;
-		}
-	}
+            t += la;
+        }
+        lef++; if(lef == n) lef = 0;
+        cnt--;
+        if(task_c[p].remain_time) {
+            rig++; if(rig == n) rig = 0;
+            id[rig] = p;
+            cnt++;
+        }
+    }
 #ifdef DEBUG
     for(int i = 0 ; i < event_cnt ; ++i) {
         fprintf(stderr, "%d %d %d\n", event[i][0], event[i][1], event[i][2]);
@@ -101,3 +101,4 @@ void rr(Task *task, int n) {
         else assert(0 && "op not in 0, 1, 2");
     }
 }
+
